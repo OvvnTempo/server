@@ -9,7 +9,8 @@ from datetime import datetime, timedelta
 
 
 # Load environment variables
-load_dotenv("../.env")
+# load_dotenv("../.env")
+load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 NEWS_API_KEY = os.getenv("NEWS_API_KEY")
 
