@@ -7,7 +7,7 @@ This guide will show you how to connect to it and use it.
 ## Live API Base URL
 The API is deployed on Render and is publicly accessible at the following URL:
 
-`__https://ovvntempo-server.onrender.com/__`
+`https://ovvntempo-server.onrender.com/`
 
 First check if the api works by going to the above url and you should see a message that says:
 
@@ -23,17 +23,19 @@ This is the core feature of the API. You send it a user's search query, and it r
 
 - **Endpoint:** `/search`  
 - **Method:** `POST`  
-- **Full URL:**  `__https://ovvntempo-server.onrender.com/search__`
+- **Full URL:**  `https://ovvntempo-server.onrender.com/search`
 
 ### Request Body
 You must send a **JSON object** in the body of your POST request. It needs to have one key: user_input.
 
 #### Example Input
-`
-{ <br>
-  "user_input": "tylenol autism trump" <br>
+<pre>
+```json
+{
+  "user_input": "tylenol autism trump"
 }
-`
+```
+</pre>
 
 #### Success Response
 If an article is found, the server will respond with a 200 OK status and a JSON object containing the article's details.
@@ -48,36 +50,40 @@ If an article is found, the server will respond with a 200 OK status and a JSON 
 
 #### Example Success Response:
 
-`
+<pre>
+```json
 {
   "query": "(+tylenol OR +acetaminophen) AND +autism AND +trump",
   "url": "https://gizmodo.com/how-the-world-is-reacting-to-trumps-tylenol-autism-scare-2000663086",
   "urlToImage": "https://gizmodo.com/app/uploads/2025/07/donald-trump-july-16-2025-1200x675.jpg",
   "title": "How the World Is Reacting to Trump’s Tylenol Autism Scare"
 }
-`
+```
+</pre>
+
 
 #### "Not Found" Response
 If no relevant articles are found for the query, the server will respond with a JSON object like this:
 
-`
-{ <br>
-  "query": "asdfghjkl",<br>
-  "url": null,<br>
-  "urlToImage": null,<br>
-  "message": "No articles found"<br>
-}<br>
-`
+<pre>
+```json
+{
+  "query": "asdfghjkl",
+  "url": null,
+  "urlToImage": null,
+  "message": "No articles found"
+}
+```
+</pre>
+
 
 ### Testing the API
 #### 1. curl Command
 You can quickly test the API from your command line using a tool like curl. This is a great way to make sure it's working before you write any mobile app code.
 
-`
-curl -X POST "[https://ovvntempo-server.onrender.com/search](https://ovvntempo-server.onrender.com/search)" \ <br>
--H "Content-Type: application/json" \ <br>
--d '{"user_input": "latest news on trump tylenol autism"}' <br>
-`
+curl -X POST "https://ovvntempo-server.onrender.com/search" \
+-H "Content-Type: application/json" \
+-d '{"user_input": "latest news on trump tylenol autism"}'
 
 #### 2. FastAPI's built-in Swagger UI
 🔗 **__https://ovvntempo-server.onrender.com/docs__** 
