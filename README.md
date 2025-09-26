@@ -94,4 +94,10 @@ curl -X POST "https://ovvntempo-server.onrender.com/search" \
 ### Important Note for Developers
 The API is hosted on Render's free tier. If it doesn't receive any requests for 15 minutes, it will go to "sleep". The first request after it has been asleep will be slow (it might take 20-30 seconds). If your first request times out, just try it again immediately, and it will be fast. This is normal behavior for the free hosting plan.
 
+## Frontend Access
+
+You can access the test frontend for the NewsURL Finder here:  
+
+__https://ovvntempo-frontend-basic.onrender.com/__  
+
 Let me know if you have any questions!
