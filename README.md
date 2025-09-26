@@ -49,14 +49,12 @@ If an article is found, the server will respond with a 200 OK status and a JSON 
 #### Example Success Response:
 
 <pre>
-```json
 {
   "query": "(+tylenol OR +acetaminophen) AND +autism AND +trump",
   "url": "https://gizmodo.com/how-the-world-is-reacting-to-trumps-tylenol-autism-scare-2000663086",
   "urlToImage": "https://gizmodo.com/app/uploads/2025/07/donald-trump-july-16-2025-1200x675.jpg",
   "title": "How the World Is Reacting to Trump’s Tylenol Autism Scare"
 }
-```
 </pre>
 
 
@@ -64,14 +62,12 @@ If an article is found, the server will respond with a 200 OK status and a JSON 
 If no relevant articles are found for the query, the server will respond with a JSON object like this:
 
 <pre>
-```json
 {
   "query": "asdfghjkl",
   "url": null,
   "urlToImage": null,
   "message": "No articles found"
 }
-```
 </pre>
 
 
@@ -79,9 +75,11 @@ If no relevant articles are found for the query, the server will respond with a 
 #### 1. curl Command
 You can quickly test the API from your command line using a tool like curl. This is a great way to make sure it's working before you write any mobile app code.
 
+<pre>
 curl -X POST "https://ovvntempo-server.onrender.com/search" \
 -H "Content-Type: application/json" \
 -d '{"user_input": "latest news on trump tylenol autism"}'
+</pre>
 
 #### 2. FastAPI's built-in Swagger UI
 🔗 **__https://ovvntempo-server.onrender.com/docs__** 
