@@ -6,6 +6,7 @@ import os
 import google.generativeai as genai
 import requests
 from datetime import datetime, timedelta
+from fastapi.middleware.cors import CORSMiddleware
 
 
 # Load environment variables
@@ -29,6 +30,18 @@ class QueryRequest(BaseModel):
 
 # Initialize FastAPI app
 app = FastAPI(title="NewsURL Finder API")
+# 2. Add the CORS middleware to your application
+# This allows your frontend example to make requests from the browser.
+origins = ["*"] # Allow all origins for development purposes
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"], # Allows all methods (GET, POST, etc.)
+    allow_headers=["*"], # Allows all headers
+)
+
 
 def refine_query(user_input: str) -> str:
     """Uses Gemini to convert natural language into a NewsAPI query string."""
@@ -77,9 +90,9 @@ def get_latest_article(query: str) -> dict:
     data = response.json()
     articles = data.get("articles", [])
     if not articles:
-        return {"query": query, "url": None, "message": "No articles found"}
+        return {"query": query, "url": None, "urlToImage": None, "message": "No articles found"}
 
-    return {"query": query, "url": articles[0]["url"], "title": articles[0]["title"]}
+    return {"query": query, "url": articles[0]["url"], "urlToImage": articles[0]["urlToImage"], "title": articles[0]["title"]}
 
 
 # POST endpoint to search for an article
