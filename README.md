@@ -7,7 +7,7 @@ This guide will show you how to connect to it and use it.
 ## Live API Base URL
 The API is deployed on Render and is publicly accessible at the following URL:
 
-`https://ovvntempo-server.onrender.com/`
+`__https://ovvntempo-server.onrender.com/__`
 
 First check if the api works by going to the above url and you should see a message that says:
 
@@ -23,15 +23,15 @@ This is the core feature of the API. You send it a user's search query, and it r
 
 - **Endpoint:** `/search`  
 - **Method:** `POST`  
-- **Full URL:**  `https://ovvntempo-server.onrender.com/search`
+- **Full URL:**  `__https://ovvntempo-server.onrender.com/search__`
 
 ### Request Body
 You must send a **JSON object** in the body of your POST request. It needs to have one key: user_input.
 
 #### Example Input
 `
-{
-  "user_input": "tylenol autism trump"
+{ <br>
+  "user_input": "tylenol autism trump" <br>
 }
 `
 
@@ -43,7 +43,7 @@ If an article is found, the server will respond with a 200 OK status and a JSON 
 - **title:** The headline of the article.
 
 - **url:** A direct link to the full article.
-- 
+
 - **urlToImage:** A link to the article's thumbnail/header image. You can use this to display an image in the app. This might be null if the article has no image.
 
 #### Example Success Response:
@@ -61,12 +61,12 @@ If an article is found, the server will respond with a 200 OK status and a JSON 
 If no relevant articles are found for the query, the server will respond with a JSON object like this:
 
 `
-{
-  "query": "asdfghjkl",
-  "url": null,
-  "urlToImage": null,
-  "message": "No articles found"
-}
+{ <br>
+  "query": "asdfghjkl",<br>
+  "url": null,<br>
+  "urlToImage": null,<br>
+  "message": "No articles found"<br>
+}<br>
 `
 
 ### Testing the API
@@ -74,13 +74,13 @@ If no relevant articles are found for the query, the server will respond with a 
 You can quickly test the API from your command line using a tool like curl. This is a great way to make sure it's working before you write any mobile app code.
 
 `
-curl -X POST "[https://ovvntempo-server.onrender.com/search](https://ovvntempo-server.onrender.com/search)" \
--H "Content-Type: application/json" \
--d '{"user_input": "latest news on trump tylenol autism"}'
+curl -X POST "[https://ovvntempo-server.onrender.com/search](https://ovvntempo-server.onrender.com/search)" \ <br>
+-H "Content-Type: application/json" \ <br>
+-d '{"user_input": "latest news on trump tylenol autism"}' <br>
 `
 
 #### 2. FastAPI's built-in Swagger UI
-🔗 **[API Docs](https://ovvntempo-server.onrender.com/docs)** 
+🔗 **__https://ovvntempo-server.onrender.com/docs__** 
 
 1. Open the docs link in your browser.  
 2. Scroll down to **POST /search**.  
