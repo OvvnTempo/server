@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NewsURL Finder Frontend</title>
+    <!-- 1. Include Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Simple fade-in animation for the results card */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <div class="w-full max-w-2xl mx-auto p-4 md:p-8">
+        <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">News Article Finder</h1>
+            <p class="text-gray-500 mb-6">Enter a topic below, and we'll find the most relevant recent article for you.</p>
+
+            <!-- 2. Create the form for user input -->
+            <div class="flex flex-col sm:flex-row gap-3 mb-6">
+                <input type="text" id="userInput" placeholder="e.g., 'latest developments in AI'" class="flex-grow w-full px-4 py-3 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+                <button id="searchButton" class="w-full sm:w-auto bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 shadow-md">
+                    Search
+                </button>
+            </div>
+
+            <!-- 3. Create the area to display results -->
+            <div id="results" class="mt-4">
+                <!-- Results will be dynamically inserted here -->
+                <div class="text-center text-gray-400 py-8">
+                    Your article will appear here...
+                </div>
+            </div>
+        </div>
+        <p class="text-center text-gray-400 mt-4 text-sm">&copy; 2025 NewsURL Finder</p>
+    </div>
+
+    <!-- 4. JavaScript to interact with the backend API -->
+    <script>
+        // Get references to the HTML elements we need to work with
+        const searchButton = document.getElementById('searchButton');
+        const userInput = document.getElementById('userInput');
+        const resultsDiv = document.getElementById('results');
+
+        // The URL of your deployed backend API on Render
+        const apiUrl = 'https://ovvntempo-server.onrender.com/search';
+
+        // This function will be called when the search button is clicked
+        async function handleSearch() {
+            const query = userInput.value.trim();
+
+            if (!query) {
+                // Using a simple, non-blocking message box instead of alert()
+                resultsDiv.innerHTML = `<div class="text-center text-yellow-800 bg-yellow-100 p-4 rounded-lg">Please enter a search topic.</div>`;
+                return;
+            }
+
+            // --- Step A: Show a loading state to the user ---
+            resultsDiv.innerHTML = `
+                <div class="text-center py-8">
+                    <p class="text-gray-500">Searching for articles...</p>
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mt-4"></div>
+                </div>`;
+            searchButton.disabled = true;
+            searchButton.textContent = 'Searching...';
+
+            try {
+                // --- Step B: Make the POST request using the Fetch API ---
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_input: query
+                    })
+                });
+
+                // --- Step C: Handle the response from the server ---
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Something went wrong on the server.');
+                }
+                const data = await response.json();
+
+                // --- Step D: Display the results in the UI ---
+                if (data.url) {
+                    // **UPDATED:** This now uses `data.urlToImage` from your API response
+                    resultsDiv.innerHTML = `
+                        <div class="border rounded-lg overflow-hidden shadow-sm animate-fade-in">
+                            <img src="${data.urlToImage || 'https://placehold.co/1280x720/e2e8f0/64748b?text=Image+Not+Available'}" alt="Article Thumbnail" class="w-full h-auto object-cover bg-gray-200">
+                            <div class="p-4 bg-white">
+                                <h3 class="font-bold text-xl text-gray-800 mb-2">${data.title}</h3>
+                                <a href="${data.url}" target="_blank" class="text-blue-600 hover:underline inline-block font-medium">
+                                    Read Full Article &rarr;
+                                </a>
+                            </div>
+                        </div>`;
+                } else {
+                    resultsDiv.innerHTML = `<div class="text-center text-gray-500 py-8">${data.message || 'No articles found.'}</div>`;
+                }
+
+            } catch (error) {
+                console.error('Fetch Error:', error);
+                resultsDiv.innerHTML = `<div class="text-center text-red-500 bg-red-100 p-4 rounded-lg"><strong>Error:</strong> ${error.message}</div>`;
+            } finally {
+                // --- Step E: Reset the button after the request is complete ---
+                searchButton.disabled = false;
+                searchButton.textContent = 'Search';
+            }
+        }
+
+        // Add an event listener to the button to trigger the search
+        searchButton.addEventListener('click', handleSearch);
+
+        // Optional: Allow pressing "Enter" in the input field to trigger the search
+        userInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                handleSearch();
+            }
+        });
+    </script>
+
+</body>
+</html>
+
