@@ -30,11 +30,9 @@ You must send a **JSON object** in the body of your POST request. It needs to ha
 
 #### Example Input
 <pre>
-```
 {
   "user_input": "tylenol autism trump"
 }
-```
 </pre>
 
 #### Success Response
